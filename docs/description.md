@@ -174,6 +174,10 @@ is used.
 > It's highly encouraged that you fully read llama-cpp and llama-cpp-python documentation relevant to your platform.
 > Running into installation issues is very likely, and you'll need to troubleshoot them yourself.
 
+#### Customizing low level parameters
+
+Currently not all the parameters of llama-cpp and llama-cpp-python are available at PrivateGPT's `settings.yaml` file. In case you need to customize parameters such as the number of layers loaded into the GPU, you might change these at the `llm_component.py` file under the `private_gpt/components/llm/llm_component.py`. If you are getting an out of memory error, you might also try a smaller model or stick to the proposed recommended models, instead of custom tuning the parameters.
+
 #### OSX GPU support
 
 You will need to build [llama.cpp](https://github.com/ggerganov/llama.cpp) with
@@ -348,25 +352,24 @@ computations.
 
 Gradio UI is a ready to use way of testing most of PrivateGPT API functionalities.
 
-![Gradio PrivateGPT](https://lh3.googleusercontent.com/drive-viewer/AK7aPaBTlIX9j5nsQ87XvcRgf3vhv6UG6pgy4j4IH5mYIo6dHcfJ5IUMiVHoqyQwjTnjRITxYTQ3TcF3pfPXyyWB3HS8hKMWDA=s1600)
+![Gradio PrivateGPT](https://lh3.googleusercontent.com/drive-viewer/AK7aPaD_Hc-A8A9ooMe-hPgm_eImgsbxAjb__8nFYj8b_WwzvL1Gy90oAnp1DfhPaN6yGiEHCOXs0r77W1bYHtPzlVwbV7fMsA=s1600)
 
 ### Execution Modes
 
 It has 3 modes of execution (you can select in the top-left):
 
-* Query Documents: uses the context from the
+* Query Docs: uses the context from the
   ingested documents to answer the questions posted in the chat. It also takes
   into account previous chat messages as context.
     * Makes use of `/chat/completions` API with `use_context=true` and no
       `context_filter`.
+* Search in Docs: fast search that returns the 4 most related text
+  chunks, together with their source document and page.
+    * Makes use of `/chunks` API with no `context_filter`, `limit=4` and
+      `prev_next_chunks=0`.
 * LLM Chat: simple, non-contextual chat with the LLM. The ingested documents won't
   be taken into account, only the previous messages.
     * Makes use of `/chat/completions` API with `use_context=false`.
-* Context Chunks: returns the JSON representation of the 2 most related text
-  chunks, together with their metadata, source document and previous and next
-  chunks.
-    * Makes use of `/chunks` API with no `context_filter`, `limit=2` and
-      `prev_next_chunks=1`.
 
 ### Document Ingestion
 

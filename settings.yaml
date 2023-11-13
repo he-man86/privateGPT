@@ -1,6 +1,11 @@
 server:
   env_name: ${APP_ENV:prod}
   port: ${PORT:8001}
+  cors:
+    enabled: false
+    allow_origins: ["*"]
+    allow_methods: ["*"]
+    allow_headers: ["*"]
 
 data:
   local_data_folder: local_data/private_gpt
@@ -10,7 +15,7 @@ ui:
   path: /
 
 llm:
-  mode: mock
+  mode: local
 
 local:
   llm_hf_repo_id: TheBloke/Mistral-7B-Instruct-v0.1-GGUF
